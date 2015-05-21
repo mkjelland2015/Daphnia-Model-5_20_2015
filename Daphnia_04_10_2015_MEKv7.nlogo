@@ -1,4 +1,10 @@
+ __includes [ 
+  "nls files/mortality.nls"
+
+  ]
+ 
  extensions [ bitmap profiler ]; bitmap takes a screenshot of view
+ 
 globals [ 
   ; max-energy-reserves - moved to interface
   ; energy-gain - moved to interface
@@ -123,18 +129,13 @@ to setup
     
   reset-ticks
   
-  
-  
-  
-movie-start "out.mov"
-movie-set-frame-rate 5
-movie-grab-view ;; show the initial state
-repeat 150
-[go movie-grab-view ]
-movie-close        
-
-
-        
+;movie-start "out.mov"
+;movie-set-frame-rate 5
+;movie-grab-view ;; show the initial state
+;repeat 150
+;[go movie-grab-view ]
+;movie-close        
+     
 end
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -166,7 +167,7 @@ end
 to update-daphnia
   ask daphnia 
   [     
-    daphnia-mortality light-exposure-counter chemical-exposure-counter temperature-exposure-counter
+    mortality light-exposure-counter chemical-exposure-counter temperature-exposure-counter
     
     ifelse transgene-upregulate-growth-factor = True and mark = 7 [set size (size + 1)][set size size]
    
@@ -174,47 +175,7 @@ to update-daphnia
   ]                                   ; ask each individual daphnia to move and age accordingly                                                                                         
 end
 
-to daphnia-mortality; begin mortality procedure
 
-  if energy-reserves <= 0 and energy-balance <= 0 [ 
-     set age-at-death age 
-     set color 5 
-     stamp die!
-     ]                                                                                                                                       ; if daphnia have a 0 energy balance then they die
-  
-  if age > max-age [                                                                                                                          ;We are assuming age is correlated with size. A maximum size class of 320 to 325 mm was imposed to reflect the largest size that any daphnia would be likely to attain (Kennedy et al. 1996; Vølstad et al. 2007).                  
-     set age-at-death age 
-     set color 5 
-     stamp die!
-     ]                    
- let rand-num random-float 1                                                             ; for counter to keep track of the number of days a.k.a. time
- if age >= 0
-  [
-  
-    ifelse tox < tox1 and tox-duration < 12 and rand-num <= tox1-probability[die!!!-tox]                                  ; defining toxicity and mortality relationship, as well as the effect of duration of toxin exposure                                                            
-           [if tox < tox1 and tox-duration >= 12 and rand-num <= tox1-probabilityb[die!!!-tox]] 
-    ifelse tox >= tox1 and tox <= tox2 and tox-duration < 12 and rand-num <= tox2-probability[die!!!-tox]
-           [if tox >= tox1 and tox <= tox2 and tox-duration >= 12 and rand-num <= tox2-probabilityb[die!!!-tox]]                                                         
-    
-    ifelse tox > tox2 and tox <= tox3 and tox-duration < 12 and rand-num <= tox3-probability[die!!!-tox]                                                        
-           [if tox > tox2 and tox <= tox3 and tox-duration >= 12 and rand-num <= tox3-probabilityb[die!!!-tox]]  
-    ifelse tox > tox3 and tox <= tox4 and tox-duration < 12 and rand-num <= tox4-probability[die!!!-tox]
-           [if tox > tox3 and tox <= tox4 and tox-duration >= 12 and rand-num <= tox4-probabilityb[die!!!-tox]]                                                          
-    
-    ifelse tox > tox4 and tox <= tox5 and tox-duration < 12 and rand-num <= tox5-probability[die!!!-tox]  
-           [if tox > tox4 and tox <= tox5 and tox-duration >= 12 and rand-num <= tox5-probabilityb[die!!!-tox]]  
-    ifelse tox > tox5 and tox-duration < 12 and rand-num <= tox6-probability[die!!!-tox]
-           [if tox > tox5 and tox-duration >= 12 and rand-num <= tox6-probabilityb[die!!!-tox]]
-    
-    ifelse temperature <= Temp1 and temperature-duration < 7 and rand-num <= Temp1-probability[die!!!!-Temperature]                 ; defining temperature and mortality relationship, as well as the effect of duration of temperature exposure                                          
-           [ifelse temperature <= Temp1 and temperature-duration >= 7 and rand-num <= Temp1-probabilityb[die!!!!-Temperature]
-             [if temperature > Temp1 and temperature <= Temp2 and rand-num <= Temp2-probability[die!!!!-Temperature]]]                                  
-    ifelse temperature > Temp2 and temperature <= Temp3 and rand-num <= Temp3-probability[die!!!!-Temperature]                                
-           [if temperature > Temp3 and temperature <= Temp4 and rand-num <= Temp4-probability[die!!!!-Temperature]]                                 
-    ifelse temperature > Temp4 and temperature <= Temp5 and temperature-duration < 7 and rand-num <= Temp5-probability[die!!!!-Temperature] 
-           [ifelse temperature > Temp4 and temperature <= Temp5 and temperature-duration >= 7 and rand-num <= Temp5-probabilityb[die!!!!-Temperature]
-             [if temperature > Temp5 and rand-num <= Temp6-probability[die!!!!-Temperature]]]]
-  end
   
   to harvest-daphnia ; begin to harvest daphnia or not to harvest daphnia
    
@@ -380,8 +341,6 @@ to temperature-exposure-counter; begin temperature exposure counter for Daphnia
 if temperature-condition = True and temperature-level > 0 [set temperature-exposure  (temperature-exposure  + 1)] 
 
 end; end temperature exposure counter for Daphnia
-
-
 
 @#$#@#$#@
 GRAPHICS-WINDOW
