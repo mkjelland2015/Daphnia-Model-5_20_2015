@@ -219,16 +219,16 @@ to setup-reproduction ; begin "setup-reproduction.nls"
   ifelse day = spawn-day and minute = spawn-minute and second = spawn-second [set spawn 1][set spawn 0];setting up the reproduction variable to distinguish from no event versus reproduction events on given days
   if spawn = 1 
  
- [ask daphnia [ set prob random-float 1 hatch random 4 [set size 1 set shape "bug" set chemical-exposure 0 set temperature-exposure 0 move-to one-of neighbors  
+ [ask daphnia [ set prob random-float 1 hatch random 4 [set size 0.9 set shape "bug" set chemical-exposure 0 set temperature-exposure 0 move-to one-of neighbors  
       
- ifelse experiment-selection = 1 [ifelse light-exposure >= 10 [ifelse prob < 0.9 [set sex "F"] [set sex "M"]]
- [ifelse prob < 0.4 [set sex "M"] [set sex "F"]]]; setting female sex during spawning as "F" when female and "M" when not
+ ifelse experiment-selection = 1 [ifelse light-exposure >= 10 [ifelse prob < 0.9 [set sex "F" set size 1] [set sex "M" set size 0.8]]
+ [ifelse prob < 0.4 [set sex "M" set size 0.8] [set sex "F" set size 1]]]; setting female sex during spawning as "F" when female and "M" when not
       
- [ifelse experiment-selection = 2 [ifelse chemical-exposure >= 10 [ifelse prob < 0.9 [set sex "F"] [set sex "M"]]
-[ifelse prob < 0.4 [set sex "M"] [set sex "F"]]];
+ [ifelse experiment-selection = 2 [ifelse chemical-exposure >= 10 [ifelse prob < 0.9 [set sex "F" set size 1] [set sex "M" set size 0.8]]
+[ifelse prob < 0.4 [set sex "M" set size 0.8] [set sex "F" set size 1]]];
       
- [if experiment-selection = 3 [ifelse temperature-exposure >= 10 [ifelse prob < 0.9 [set sex "F"] [set sex "M"]]
- [ifelse prob < 0.4 [set sex "M"] [set sex "F"]]]]];    
+ [if experiment-selection = 3 [ifelse temperature-exposure >= 10 [ifelse prob < 0.9 [set sex "F" set size 1] [set sex "M" set size 0.8]]
+ [ifelse prob < 0.4 [set sex "M" set size 0.8] [set sex "F" set size 1]]]]];    
   if sex = "F" [set color pink - 2] 
   if sex = "M" [set color blue - 2]
        set comfort-level 10 set light-exposure 0 set prob random-float 1 set myID self       
@@ -341,7 +341,6 @@ to temperature-exposure-counter; begin temperature exposure counter for Daphnia
 if temperature-condition = True and temperature-level > 0 [set temperature-exposure  (temperature-exposure  + 1)] 
 
 end; end temperature exposure counter for Daphnia
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 288
